@@ -10,7 +10,13 @@ def falling(n, k):
     >>> falling(4, 0)
     1
     """
-    "*** YOUR CODE HERE ***"
+    assert( n >= k )
+    factorial = 1
+    while k != 0:
+        factorial *= n
+        n -= 1
+        k -= 1
+    return factorial
 
 
 def divisible_by_k(n, k):
@@ -33,8 +39,17 @@ def divisible_by_k(n, k):
     >>> c
     0
     """
-    "*** YOUR CODE HERE ***"
-
+    if n < k:
+        return 0
+    dividend = 1
+    divisor = k
+    dividend_num = 0
+    while dividend <= n:
+        if dividend % divisor == 0:
+            print(dividend)
+            dividend_num += 1
+        dividend += 1
+    return dividend_num
 
 def sum_digits(y):
     """Sum all the digits of y.
@@ -49,8 +64,11 @@ def sum_digits(y):
     >>> a
     6
     """
-    "*** YOUR CODE HERE ***"
-
+    cur_sum_digits = 0
+    while y > 0:
+        cur_sum_digits += y % 10
+        y = y // 10
+    return cur_sum_digits
 
 def double_eights(n):
     """Return true if n has two eights in a row.
@@ -67,5 +85,16 @@ def double_eights(n):
     >>> double_eights(80808080)
     False
     """
-    "*** YOUR CODE HERE ***"
-
+    while n > 10:
+        units_place = n % 10
+        tens_place = (n // 10) % 10
+        if (units_place == tens_place) & (units_place == 8):
+            return True
+        if tens_place != 8:
+            n = n // 100
+        else:
+            if (n // 100) % 10 == 8:
+                return True
+            else:
+                n = n // 1000
+    return False
