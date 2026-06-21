@@ -13,7 +13,9 @@ def composite_identity(f, g):
     >>> b1(4)                            # (4 + 1) ** 2 != 4 ** 2 + 1
     False
     """
-    "*** YOUR CODE HERE ***"
+    def func_exchange_equal(x):
+        return f(g(x)) == f(g(x))
+    return func_exchange_equal
 
 
 def sum_digits(y):
@@ -59,7 +61,15 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+    def count_satisfy(n):
+        i = 1
+        count = 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+    return count_satisfy
 
 
 def multiple(a, b):
@@ -70,8 +80,12 @@ def multiple(a, b):
     >>> multiple(14, 21)
     42
     """
-    "*** YOUR CODE HERE ***"
-
+    larger_num = max(a, b)
+    smaller_num = min(a, b)
+    times = 1
+    while times * larger_num % smaller_num != 0:
+        times += 1
+    return times * larger_num
 
 
 def cycle(f1, f2, f3):
@@ -100,5 +114,23 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
-
+    def record_execution_count(n):
+        assert type(n) is int
+        assert n >= 0
+        def cycle_execution(x):
+            if n == 0:
+                return x
+            res = x
+            count = 1
+            while count <= n:
+                match 3 if count % 3 == 0 else count % 3:
+                    case 1:
+                        res = f1(res)
+                    case 2:
+                        res = f2(res)
+                    case 3:
+                        res = f3(res)
+                count += 1
+            return res
+        return cycle_execution
+    return record_execution_count
