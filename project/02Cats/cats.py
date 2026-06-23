@@ -30,7 +30,12 @@ def pick(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    for idx in range(len(paragraphs)):
+        if select(paragraphs[idx]):
+            k = k - 1
+        if k < 0:
+            return paragraphs[idx]
+    return ''
     # END PROBLEM 1
 
 
@@ -49,7 +54,14 @@ def about(subject):
     """
     assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    def contains_subject(paragraph):
+        cleaned_words = remove_punctuation(lower(paragraph)).split()
+        for pattern in subject:
+            for word in cleaned_words:
+                if pattern == word:
+                    return True
+        return False
+    return contains_subject
     # END PROBLEM 2
 
 
@@ -79,7 +91,18 @@ def accuracy(typed, source):
     typed_words = split(typed)
     source_words = split(source)
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    typed_words_len = len(typed_words)
+    source_words_len = len(source_words)
+    if typed_words_len == 0 and source_words_len == 0:
+        return 100.
+    elif typed_words_len == 0 or source_words_len == 0:
+        return 0.
+    shorter_len = min(typed_words_len, source_words_len)
+    same_word_count = 0
+    for idx in range(shorter_len):
+        if typed_words[idx] == source_words[idx]:
+            same_word_count += 1
+    return 100 * (same_word_count / typed_words_len)
     # END PROBLEM 3
 
 
@@ -97,7 +120,8 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    typed_words_num = len(typed) / 5 # five characters as a group
+    return typed_words_num / elapsed * 60
     # END PROBLEM 4
 
 
