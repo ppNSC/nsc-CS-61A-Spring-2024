@@ -150,7 +150,16 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    cur_min_diff = limit + 1
+    cur_min_diff_word = ""
+    for word in word_list:
+        if typed_word == word:
+            return typed_word
+        cur_diff = diff_function(typed_word, word, limit)
+        if cur_diff < cur_min_diff:
+            cur_min_diff = cur_diff
+            cur_min_diff_word = word
+    return typed_word if cur_min_diff > limit else cur_min_diff_word
     # END PROBLEM 5
 
 
@@ -177,7 +186,16 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    def fixes_within_limit(typed, source, remain_chance):
+        if remain_chance < 0:
+            return limit + 1
+        if typed == "" or source == "":
+            return max(len(typed), len(source))
+        if typed[0] == source[0]:
+            return fixes_within_limit(typed[1:], source[1:], remain_chance)
+        elif typed[0] != source[0]:
+            return 1 + fixes_within_limit(typed[1:], source[1:], remain_chance-1)
+    return fixes_within_limit(typed, source, limit)
     # END PROBLEM 6
 
 
@@ -201,23 +219,19 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    def min_edits(typed, source, modify_times):
+        if modify_times > limit:
+            return modify_times
+        if typed == "" or source == "":
+            return modify_times + max(len(typed), len(source))
+        if typed[0] == source[0]:
+            return min_edits(typed[1:], source[1:], modify_times)
+        else:
+            times_if_add = min_edits(typed, source[1:], modify_times+1)
+            times_if_remove = min_edits(typed[1:], source, modify_times+1)
+            times_if_substitude = min_edits(typed[1:], source[1:], modify_times+1)
+            return min(times_if_add, times_if_remove, times_if_substitude)
+    return min_edits(typed, source, 0)
 
 
 def final_diff(typed, source, limit):
