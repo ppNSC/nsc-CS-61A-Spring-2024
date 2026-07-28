@@ -1,4 +1,4 @@
-passphrase = '*** PASSPHRASE HERE ***'
+passphrase = 'allegoryofthecave'
 
 def midsem_survey(p):
     """
@@ -47,7 +47,33 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def vend(self):
+        if self.stock == 0:
+            return 'Nothing left to vend. Please restock.'
+        if self.balance < self.price:
+            return f'Please add ${self.price - self.balance} more funds.'
+        self.stock -= 1
+        change = self.balance - self.price
+        self.balance = 0
+        if change > 0:
+            return f'Here is your {self.product} and ${change} change.'
+        return f'Here is your {self.product}.'
+
+    def add_funds(self, amount):
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock. Here is your ${amount}.'
+        self.balance += amount
+        return f'Current balance: ${self.balance}'
+
+    def restock(self, n):
+        self.stock += n
+        return f'Current {self.product} stock: {self.stock}'
 
 
 def store_digits(n):
@@ -67,8 +93,11 @@ def store_digits(n):
     >>> cleaned = re.sub(r"#.*\\n", '', re.sub(r'"{3}[\s\S]*?"{3}', '', inspect.getsource(store_digits)))
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
-    "*** YOUR CODE HERE ***"
-
+    result = Link.empty
+    while n > 0:
+        result = Link(n % 10, result)
+        n = n // 10
+    return result
 
 def deep_map_mut(func, lnk):
     """Mutates a deep link lnk by replacing each item found with the
@@ -89,7 +118,13 @@ def deep_map_mut(func, lnk):
     >>> print(link1)
     <9 <16> 25 36>
     """
-    "*** YOUR CODE HERE ***"
+    if lnk is Link.empty:
+        return
+    elif isinstance(lnk.first, Link):
+        deep_map_mut(func, lnk.first)
+    else:
+        lnk.first = func(lnk.first)
+    deep_map_mut(func, lnk.rest)
 
 
 def two_list(vals, counts):
@@ -110,8 +145,12 @@ def two_list(vals, counts):
     >>> c
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
-    "*** YOUR CODE HERE ***"
-
+    length = len(vals)
+    result = Link.empty
+    for idx in range(length-1, -1, -1):
+        for _ in range(counts[idx]):
+            result = Link(vals[idx], result)
+    return result
 
 class Link:
     """A linked list.
@@ -153,4 +192,3 @@ class Link:
             string += str(self.first) + ' '
             self = self.rest
         return string + str(self.first) + '>'
-
